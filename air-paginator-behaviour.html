@@ -29,8 +29,14 @@
         },
 
         observers: [
-            '_computeCurrentPage(from, size)'
+            '_computeCurrentPage(from, size)',
+            '_computeLastPage(total, size)'
         ],
+
+        _computeLastPage: function (total, size) {
+            // return Math.ceil(this.total / this.size);
+            return this.size > 0 ? Math.max(1, Math.ceil(total / size)) : 0;
+        },
 
         _computeCurrentPage: function (from, size) {
             from = from || this.from;
