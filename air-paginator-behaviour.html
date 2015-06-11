@@ -40,21 +40,24 @@
                 notify: true
             },
             // Status Value
-            firstpage: {
+            firstPage: {
                 type: Number,
                 value: 1
             },
-            lastpage: {
+            lastPage: {
                 type: Number,
+                notify: true,
                 computed: '_computeLastPage(total, size)'
             },
-            currentpage: {
+            currentPage: {
                 type: Number,
-                computed: '_computeCurrentPage(from, size)'
+                notify: true,
+                value: 1
             },
             currentRange: {
                 type: Array,
-                computed: '_computePageRange: function (firstpage, lastpage, currentpage, range)'
+                notify: true,
+                computed: '_computePageRange(range, firstPage, currentPage, lastPage)'
             }
         },
 
@@ -83,28 +86,27 @@
                     pageid = '-' + this.range;
                     break;
                 case 'first' :
-                    pageid = this.firstpage;
+                    pageid = this.firstPage;
                     break;
                 case 'last' :
-                    pageid = this.lastpage;
+                    pageid = this.lastPage;
                     break;
             }
-            var nextCurrent = this.currentpage;
+            var nextCurrent = this.currentPage;
             // Do operation
             if ((typeof pageid === 'string') && (pageid.indexOf('+') === 0)) {
                 var inc1 = parseInt(pageid.slice(1), 10);
-                //console.log('Select  page + ', inc, ' current ', this.currentpage, ' /this.lastpage , ', this.lastpage);
-                nextCurrent = Math.min(this.lastpage, this.currentpage + inc1);
-                //console.log('Select  page + ', inc, ' current ', this.currentpage);
+                //console.log('Select  page + ', inc, ' current ', this.currentPage, ' /this.lastPage , ', this.lastPage);
+                nextCurrent = Math.min(this.lastPage, this.currentPage + inc1);
+                //console.log('Select  page + ', inc, ' current ', this.currentPage);
             } else if ((typeof pageid === 'string') && (pageid.indexOf('-') === 0)) {
                 var inc2 = parseInt(pageid.slice(1), 10);
-                nextCurrent = Math.max(this.firstpage, this.currentpage - inc2);
+                nextCurrent = Math.max(this.firstPage, this.currentPage - inc2);
             } else {
-                nextCurrent = Math.min(Math.max(parseInt(pageid, 10), this.firstpage), this.lastpage);
+                nextCurrent = Math.min(Math.max(parseInt(pageid, 10), this.firstPage), this.lastPage);
             }
-            this.currentpage = nextCurrent;
+            this.currentPage = nextCurrent;
         },
-
 
 
         // --- Event
@@ -121,16 +123,19 @@
         _computeCurrentPage: function (from, size) {
             var nextCurrent = size > 0 ? Math.max(1, Math.floor(from / size) + 1) : 0;
             //  console.log('compute current page :', nextCurrent);
-            this.currentpage = nextCurrent;
+            console.log('--- _computeCurrentPage (', from, ', ', size, ') ---> ', nextCurrent);
+            this.currentPage = nextCurrent;
         },
 
         // --- Computed Logic
         // --- ---------------------
-        _computePageRange: function (firstpage, lastpage, currentpage, range) {
+        _computePageRange: function (range, firstpage, currentpage, lastpage) {
+            console.log('--- _computePageRange (', range, ', ', firstpage, ', ', currentpage, ', ', lastpage, ') ---> ');
+
             var paginations = [];
-            // Check currentpage in range
-//            if (currentpage > lastpage) {
-//                this.currentpage = Math.max(firstpage, lastpage);
+            // Check currentPage in range
+//            if (currentPage > lastPage) {
+//                this.currentPage = Math.max(firstPage, lastPage);
 //                return paginations;
 //            }
             // Rangeoo
@@ -157,10 +162,10 @@
 
         _computeLastPage: function (total, size) {
             // return Math.ceil(this.total / this.size);
-            return size > 0 ? Math.max(1, Math.ceil(total / size)) : 0;
+            var newLastPage = size > 0 ? Math.max(1, Math.ceil(total / size)) : 0;
+            console.log('--- _computeLastPage (', total, ', ', size, ') ---> ', newLastPage);
+            return newLastPage;
         },
-
-
 
 
     };

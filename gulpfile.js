@@ -42,6 +42,7 @@ gulp.task('serve',   function () {
         // Note: this uses an unsigned certificate which on first access
         //       will present a certificate warning in the browser.
         // https: true,
+        startPath: "/air-paginator/demo/index.html",
         server: {
             baseDir: ['../.'],
             directory: true

@@ -17,36 +17,102 @@ The `air-cascade-validator` provides cascade validation for all nodes
         :host {
             display: block;
         }
+        .air-pagination {
+            display: inline-block;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .air-pagination > li {
+            display: inline;
+        }
+        .air-pagination > li > a,
+        .air-pagination > li > span {
+            position: relative;
+            float: left;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px 16px;
+            font-size: 18px;
+        }
+        .air-pagination > li:first-child > a,
+        .air-pagination > li:first-child > span {
+            margin-left: 0;
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+        .air-pagination > li:last-child > a,
+        .air-pagination > li:last-child > span {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+        .air-pagination > li > a:hover,
+        .air-pagination > li > span:hover,
+        .air-pagination > li > a:focus,
+        .air-pagination > li > span:focus {
+            color: #23527c;
+            background-color: #eee;
+            border-color: #ddd;
+        }
+        .air-pagination > .active > a,
+        .air-pagination > .active > span,
+        .air-pagination > .active > a:hover,
+        .air-pagination > .active > span:hover,
+        .air-pagination > .active > a:focus,
+        .air-pagination > .active > span:focus {
+            z-index: 2;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+        .air-pagination > .disabled > span,
+        .air-pagination > .disabled > span:hover,
+        .air-pagination > .disabled > span:focus,
+        .air-pagination > .disabled > a,
+        .air-pagination > .disabled > a:hover,
+        .air-pagination > .disabled > a:focus {
+            color: #777;
+            cursor: not-allowed;
+            background-color: #fff;
+            border-color: #ddd;
+        }
     </style>
     <template>
-        <template is="dom-if"  if="{{lastpage > 1}}">
-            <ul class="pagination pagination-lg">
+        <h1>Paginator</h1>
+        <div>{{from}}</div>
+        <!--<template is="dom-if"  if="{{lastPage > 1}}">-->
+            <ul class="air-pagination pagination-lg">
                 <li class="{{currentpage <= 1 ? 'disabled' : '' }}"
-                    on-tap="{{selectPage}}" pageid="first">
+                    on-tap="selectPage" pageid="first">
                     <a>&vartriangleleft;</a>
                 </li>
                 <li class="{{currentpage <= 1 ? 'disabled' : '' }}"
-                    on-tap="{{selectPage}}" pageid="previous">
+                    on-tap="selectPage" pageid="previous">
                     <a>&laquo;</a>
                 </li>
-                <template is="dom-repeat" repeat="{{currentRange}}" as="n">
+                <template is="dom-repeat" items="{{currentRange}}" as="n">
                     <li class="{{currentpage === n ? 'active' : ''}}"
-                        on-tap="{{selectPage}}" pageid="{{n}}">
+                        on-tap="selectPage" pageid="{{n}}">
                         <a><span>{{n}}</span>
-                            <template if="{{currentpage === n }}"><span class="sr-only">(*)</span></template>
+                            <template is="dom-repeat" if="{{currentpage === n }}"><span class="sr-only">(*)</span></template>
                         </a>
                     </li>
                 </template>
                 <li class="{{ currentpage >= lastpage ? 'disabled' : '' }}"
-                    on-tap="{{selectPage}}" pageid="next">
+                    on-tap="selectPage" pageid="next">
                     <a>&raquo;</a>
                 </li>
                 <li class="{{ currentpage >= lastpage ? 'disabled' : '' }}"
-                    on-tap="{{selectPage}}" pageid="last">
+                    on-tap="selectPage" pageid="last">
                     <a>&vartriangleright;</a>
                 </li>
             </ul>
-        </template>
+        <!--</template>-->
 
     </template>
 </dom-module>
