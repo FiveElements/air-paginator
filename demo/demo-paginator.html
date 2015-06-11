@@ -5,6 +5,7 @@
 
 <link rel="import" href="../../paper-input/paper-input.html">
 <link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-slider/paper-slider.html">
 
 <link rel="import" href="../air-paginator.html">
 
@@ -17,20 +18,48 @@ The `user-validator` provides
 @demo demo/index.html
 -->
 
-<dom-module id="demo-validator">
+<dom-module id="demo-paginator">
 
     <style>
         :host {
             display: block;
         }
+
+        paper-slider {
+            width: 100%;
+        }
     </style>
     <template>
-        <paper-button  on-tap="validate">
-            <iron-icon icon="save"></iron-icon>
-            <span>Validate</span> is valid: <span>[[isValid]]</span>
-        </paper-button>
-       <air-paginator>
-       </air-paginator>
+
+
+        <div class="horizontal layout">
+            <div>Range</div>
+            <paper-slider value="{{range}}" min="-1" max="50" editable></paper-slider>
+        </div>
+        <div class="horizontal layout">
+            <div>Size</div>
+            <paper-slider value="{{size}}" max="100" editable></paper-slider>
+        </div>
+        <div class="horizontal layout">
+            <div>Total</div>
+            <paper-slider value="{{total}}" max="9000" editable></paper-slider>
+        </div>
+        <div class="horizontal layout">
+            <div>From</div>
+            <paper-input label="from" value="{{from}}" type="number"></paper-input>
+        </div>
+
+        <section class="vertical layout">
+            <div>currentpage : <span>{{currentpage}}</span></div>
+            <div>lastpage : <span>{{lastpage}}</span></div>
+        </section>
+
+
+        <air-paginator range="{{range}}"
+                       from="{{from}}" size="{{size}}"
+                       total="{{total}}">
+
+        </air-paginator>
     </template>
 </dom-module>
 
@@ -39,27 +68,31 @@ The `user-validator` provides
         'use strict';
 
         Polymer({
-            is: 'demo-validator',
+            is: 'demo-paginator',
 
             properties: {
-                data: {
-                    type: Object,
-                    value: {
-                        firstname:  null,
-                        lastname: null,
-                        email: 'toto'
-                    },
-                    notity: true
+                from: {
+                    type: Number,
+                    notify: true,
+                    value: 10
                 },
-                isValid: {
-                    type: Boolean,
-                    value: false
+                size: {
+                    type: Number,
+                    notify: true,
+                    value: 20
+                },
+                total: {
+                    type: Number,
+                    notify: true,
+                    value: 5002
+                },
+                range: {
+                    type: Number,
+                    notify: true,
+                    value: 10
                 }
-            },
-
-            validate: function () {
-                this.isValid = this.$.form.validate();
             }
+
 
         });
     })();

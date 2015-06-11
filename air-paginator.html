@@ -6,8 +6,8 @@
 
 The `air-cascade-validator` provides cascade validation for all nodes
 
-@group air Elements
-@element air-cascade-validator
+@group air-elements
+@element air-paginator
 @demo demo/index.html
 -->
 
@@ -19,7 +19,35 @@ The `air-cascade-validator` provides cascade validation for all nodes
         }
     </style>
     <template>
-        <content></content>
+        <template is="dom-if"  if="{{lastpage > 1}}">
+            <ul class="pagination pagination-lg">
+                <li class="{{currentpage <= 1 ? 'disabled' : '' }}"
+                    on-tap="{{selectPage}}" pageid="first">
+                    <a>&vartriangleleft;</a>
+                </li>
+                <li class="{{currentpage <= 1 ? 'disabled' : '' }}"
+                    on-tap="{{selectPage}}" pageid="previous">
+                    <a>&laquo;</a>
+                </li>
+                <template is="dom-repeat" repeat="{{currentRange}}" as="n">
+                    <li class="{{currentpage === n ? 'active' : ''}}"
+                        on-tap="{{selectPage}}" pageid="{{n}}">
+                        <a><span>{{n}}</span>
+                            <template if="{{currentpage === n }}"><span class="sr-only">(*)</span></template>
+                        </a>
+                    </li>
+                </template>
+                <li class="{{ currentpage >= lastpage ? 'disabled' : '' }}"
+                    on-tap="{{selectPage}}" pageid="next">
+                    <a>&raquo;</a>
+                </li>
+                <li class="{{ currentpage >= lastpage ? 'disabled' : '' }}"
+                    on-tap="{{selectPage}}" pageid="last">
+                    <a>&vartriangleright;</a>
+                </li>
+            </ul>
+        </template>
+
     </template>
 </dom-module>
 

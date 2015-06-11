@@ -1,0 +1,36 @@
+{
+  "name": "air-paginator",
+  "version": "0.0.1",
+  "description": "Air paginator",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test:local"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FiveElements/air-paginator.git"
+  },
+  "keywords": [
+    "web-components",
+    "polymer",
+    "five-elements",
+    "air-elements",
+    "paginator"
+  ],
+  "author": "Five Elements Author",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FiveElements/air-paginator/issues"
+  },
+  "homepage": "https://github.com/FiveElements/air-paginator#readme",
+  "devDependencies": {
+    "browser-sync": "^2.7.7",
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.0",
+    "jshint-stylish": "^2.0.0",
+    "web-component-tester": "^3.1.7"
+  }
+}

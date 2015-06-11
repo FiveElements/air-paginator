@@ -7,44 +7,159 @@
      */
     Polymer.AirPaginatorBehavior = {
         properties: {
+            // User Input
+            /**
+             * The Index of the first Items to display In the List
+             */
             from: {
                 type: Number,
                 notify: true,
-                value: 10
+                value: 0
             },
+            /**
+             * The Number of the Items to display In the List
+             */
             size: {
                 type: Number,
                 notify: true,
                 value: 10
             },
+            /**
+             * The range of Page to display In the Paginator
+             */
             range: {
                 type: Number,
                 notify: true,
                 value: 10
             },
+            /**
+             * Number of Items In the List
+             */
             total: {
                 type: Number,
                 notify: true
+            },
+            // Status Value
+            firstpage: {
+                type: Number,
+                value: 1
+            },
+            lastpage: {
+                type: Number,
+                computed: '_computeLastPage(total, size)'
+            },
+            currentpage: {
+                type: Number,
+                computed: '_computeCurrentPage(from, size)'
+            },
+            currentRange: {
+                type: Array,
+                computed: '_computePageRange: function (firstpage, lastpage, currentpage, range)'
             }
         },
 
+
         observers: [
-            '_computeCurrentPage(from, size)',
-            '_computeLastPage(total, size)'
+            '_computeCurrentPage(from, size)'
         ],
+
+        // --- Apis
+        // --- ---------------------
+        selectPage: function (e, data, sender) {
+            var pageid = sender.getAttribute('pageid');
+            // console.log("select Page : ", pageid);
+            // verb control
+            switch (pageid) {
+                case 'next' :
+                    pageid = '+1';
+                    break;
+                case 'previous' :
+                    pageid = '-1';
+                    break;
+                case 'nextRange' :
+                    pageid = '+' + this.range;
+                    break;
+                case 'previousRange' :
+                    pageid = '-' + this.range;
+                    break;
+                case 'first' :
+                    pageid = this.firstpage;
+                    break;
+                case 'last' :
+                    pageid = this.lastpage;
+                    break;
+            }
+            var nextCurrent = this.currentpage;
+            // Do operation
+            if ((typeof pageid === 'string') && (pageid.indexOf('+') === 0)) {
+                var inc1 = parseInt(pageid.slice(1), 10);
+                //console.log('Select  page + ', inc, ' current ', this.currentpage, ' /this.lastpage , ', this.lastpage);
+                nextCurrent = Math.min(this.lastpage, this.currentpage + inc1);
+                //console.log('Select  page + ', inc, ' current ', this.currentpage);
+            } else if ((typeof pageid === 'string') && (pageid.indexOf('-') === 0)) {
+                var inc2 = parseInt(pageid.slice(1), 10);
+                nextCurrent = Math.max(this.firstpage, this.currentpage - inc2);
+            } else {
+                nextCurrent = Math.min(Math.max(parseInt(pageid, 10), this.firstpage), this.lastpage);
+            }
+            this.currentpage = nextCurrent;
+        },
+
+
+
+        // --- Event
+        // --- ---------------------
+        firePagingChangeEvent: function () {
+            this.fire('change', {
+                'from': this.from,
+                'size': this.size
+            });
+        },
+
+        // --- User Input Event
+        // --- ---------------------
+        _computeCurrentPage: function (from, size) {
+            var nextCurrent = size > 0 ? Math.max(1, Math.floor(from / size) + 1) : 0;
+            //  console.log('compute current page :', nextCurrent);
+            this.currentpage = nextCurrent;
+        },
+
+        // --- Computed Logic
+        // --- ---------------------
+        _computePageRange: function (firstpage, lastpage, currentpage, range) {
+            var paginations = [];
+            // Check currentpage in range
+//            if (currentpage > lastpage) {
+//                this.currentpage = Math.max(firstpage, lastpage);
+//                return paginations;
+//            }
+            // Rangeoo
+            var rangeMin, rangeMax;
+            if (this.range === -1) {
+                // Display all pages
+                rangeMin = firstpage;
+                rangeMax = lastpage;
+            } else {
+                // Display a range of pages
+                var rangeMiddle = Math.ceil(range / 2) - 1;
+                rangeMin = Math.max(1, currentpage - rangeMiddle);
+                rangeMax = Math.min(lastpage, rangeMin + range - 1);
+            }
+            // Compute range in case of reach end
+            if (rangeMax - rangeMin < range) {
+                rangeMin = Math.max(1, rangeMax - range + 1);
+            }
+            for (var i = rangeMin; i <= rangeMax; i++) {
+                paginations.push(i);
+            }
+            return paginations;
+        },
 
         _computeLastPage: function (total, size) {
             // return Math.ceil(this.total / this.size);
-            return this.size > 0 ? Math.max(1, Math.ceil(total / size)) : 0;
+            return size > 0 ? Math.max(1, Math.ceil(total / size)) : 0;
         },
 
-        _computeCurrentPage: function (from, size) {
-            from = from || this.from;
-            size = size || this.size;
-            var nextCurrent = size > 0 ? Math.max(1, Math.floor(from / size) + 1) : 0;
-            //  console.log('compute current page :', nextCurrent);
-            return nextCurrent;
-        }
 
 
 
