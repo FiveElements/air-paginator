@@ -42,6 +42,7 @@
             // Status Value
             firstPage: {
                 type: Number,
+                notify: true,
                 value: 1
             },
             lastPage: {
@@ -68,9 +69,17 @@
 
         // --- Apis
         // --- ---------------------
-        selectPage: function (e, data, sender) {
+        handleSelectPage: function(event) {
+            var evt = Polymer.dom(event);
+            // console.dir(event);
+            // console.dir(evt);
+            var sender =  evt.rootTarget;
             var pageid = sender.getAttribute('pageid');
-            // console.log("select Page : ", pageid);
+            this.selectPage(pageid);
+        },
+
+        selectPage: function (pageid) {
+             console.log("select Page : ", pageid);
             // verb control
             switch (pageid) {
                 case 'next' :
@@ -105,6 +114,7 @@
             } else {
                 nextCurrent = Math.min(Math.max(parseInt(pageid, 10), this.firstPage), this.lastPage);
             }
+            console.log("select Page : ", pageid, ' ---- > currentPage = ', nextCurrent);
             this.currentPage = nextCurrent;
         },
 

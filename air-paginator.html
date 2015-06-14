@@ -17,6 +17,53 @@ The `air-cascade-validator` provides cascade validation for all nodes
         :host {
             display: block;
         }
+        .pagination {
+            display: block;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #424242;
+        }
+
+        .pagination .prev {
+            margin-right: 30px;
+        }
+        .pagination .next {
+            margin-left: 30px;
+        }
+
+        .pagination li {
+            display: inline;
+        }
+
+        .pagination .active .itens, .pagination .active .itens:hover {
+            z-index: 2;
+            background-color: #ff4081;
+            cursor: default;
+        }
+
+        .pagination .itens {
+            position: relative;
+            font-size: 14px;
+         //   line-height: 1.42857143;
+            text-decoration: none;
+            color: #FFF;
+            background-color: #9dacb4;
+            margin-left: -1px;
+            border-radius: 50%;
+            background: #7c949f;
+            width: 38px;
+            height: 38px;
+            display: inline-block;
+            padding-top: 5px;
+        }
+        .pagination a {
+            text-decoration: none;
+            color: #424242;
+        }
+
+        /* BOOTSTRAP */
+
         .air-pagination {
             display: inline-block;
             padding-left: 0;
@@ -86,32 +133,25 @@ The `air-cascade-validator` provides cascade validation for all nodes
         <h1>Paginator</h1>
         <div>{{from}}</div>
         <!--<template is="dom-if"  if="{{lastPage > 1}}">-->
-            <ul class="air-pagination pagination-lg">
-                <li class="{{currentpage <= 1 ? 'disabled' : '' }}"
-                    on-tap="selectPage" pageid="first">
-                    <a>&vartriangleleft;</a>
+            <nav class="pagination">
+                <li on-tap="selectPage('first')" pageid="first">
+                    <a class="prev itens">&vartriangleleft;</a>
                 </li>
-                <li class="{{currentpage <= 1 ? 'disabled' : '' }}"
-                    on-tap="selectPage" pageid="previous">
-                    <a>&laquo;</a>
+                <li on-tap="selectPage('previous')" pageid="previous">
+                    <a  class="prev itens">&laquo;</a>
                 </li>
                 <template is="dom-repeat" items="{{currentRange}}" as="n">
-                    <li class="{{currentpage === n ? 'active' : ''}}"
-                        on-tap="selectPage" pageid="{{n}}">
-                        <a><span>{{n}}</span>
-                            <template is="dom-repeat" if="{{currentpage === n }}"><span class="sr-only">(*)</span></template>
-                        </a>
+                    <li  on-tap="handleSelectPage"  pageid="{{n}}" class$="{{_computeCurrentPageClass(n)}}">
+                        <a class="itens" >{{n}}</a>
                     </li>
                 </template>
-                <li class="{{ currentpage >= lastpage ? 'disabled' : '' }}"
-                    on-tap="selectPage" pageid="next">
-                    <a>&raquo;</a>
+                <li on-tap="selectPage('next')" pageid="next">
+                    <a class="next itens">&raquo;</a>
                 </li>
-                <li class="{{ currentpage >= lastpage ? 'disabled' : '' }}"
-                    on-tap="selectPage" pageid="last">
-                    <a>&vartriangleright;</a>
+                <li on-tap="selectPage('last')" pageid="last">
+                    <a class="next itens">&vartriangleright;</a>
                 </li>
-            </ul>
+            </nav>
         <!--</template>-->
 
     </template>
@@ -127,8 +167,12 @@ The `air-cascade-validator` provides cascade validation for all nodes
             behaviors: [
                 Polymer.AirPaginatorBehavior
             ],
-
-            properties: {}
+            _computeCurrentPageClass: function (page) {
+                return this.currentPage === page ? 'active' : '';
+            },
+           _computeLastPageClass: function () {
+               return this.currentPage >= this.lastPage ? 'disabled' : '';
+           }
 
         });
     })();
