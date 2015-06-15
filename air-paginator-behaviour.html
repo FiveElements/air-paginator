@@ -73,12 +73,30 @@
         handleSelectPage: function(event) {
             var evt = Polymer.dom(event);
             var sender =  evt.rootTarget;
-            var pageid = sender.getAttribute('pageid');
+            var pageid = this._findParentNodeAttrValue('pageid', sender);
 //            console.log("Event : " , event);
 //            console.log("Event Normalize : ", evt);
 //            console.log("Sender : ", sender);
+//            console.log("Sender parent: ", sender.parentNode );
 //            console.log("Page Id : ", pageid);
-            this.selectPage(pageid);
+            if (pageid) {
+                this.selectPage(pageid);
+            }
+        },
+        _findParentNodeAttrValue:function(attrName, node) {
+            var nodePageId = this._findParentNodeWithAttr(attrName, node);
+            if (nodePageId) {
+                return nodePageId.getAttribute(attrName);
+            }
+        },
+        _findParentNodeWithAttr:function(attrName, node) {
+            if (!node) {
+                return undefined;
+            } else  if (node.getAttribute(attrName)) {
+                return node;
+            } else {
+                return this._findParentNodeWithAttr(attrName, node.parentNode);
+            }
         },
 
         selectPage: function (pageid) {
@@ -117,7 +135,7 @@
             } else {
                 nextCurrent = Math.min(Math.max(parseInt(pageid, 10), this.firstPage), this.lastPage);
             }
-            console.log("select Page : ", pageid, ' ---- > currentPage = ', nextCurrent);
+            //console.log("select Page : ", pageid, ' ---- > currentPage = ', nextCurrent);
             this.currentPage = nextCurrent;
         },
 
@@ -125,7 +143,7 @@
         // --- ---------------------
         _currentPageChanged: function (newValue, oldValue) {
             var newFromValue = Math.max(0, (newValue - 1) * this.size);
-            console.log('_currentPageChanged to ', newValue, ' ---- from ---->',  this.from ,  ' to ', newFromValue);
+            //console.log('_currentPageChanged to ', newValue, ' ---- from ---->',  this.from ,  ' to ', newFromValue);
             if (this.from !== newFromValue) {
                 this.from = newFromValue;
                 // Fire Event On page Change but not in the init time
@@ -150,7 +168,7 @@
         _computeCurrentPage: function (from, size) {
             var nextCurrent = size > 0 ? Math.max(1, Math.floor(from / size) + 1) : 0;
             //  console.log('compute current page :', nextCurrent);
-            console.log('--- _computeCurrentPage (', from, ', ', size, ') ---> ', nextCurrent);
+            //console.log('--- _computeCurrentPage (', from, ', ', size, ') ---> ', nextCurrent);
             this.currentPage = nextCurrent;
         },
 
@@ -186,14 +204,14 @@
             for (var i = rangeMin; i <= rangeMax; i++) {
                 paginations.push(i);
             }
-            console.log('--- _computePageRange (', range, ', ', firstpage, ', ', currentpage, ', ', lastpage, ') ---> ', paginations);
+            //console.log('--- _computePageRange (', range, ', ', firstpage, ', ', currentpage, ', ', lastpage, ') ---> ', paginations);
             return paginations;
         },
 
         _computeLastPage: function (total, size) {
             // return Math.ceil(this.total / this.size);
             var newLastPage = size > 0 ? Math.max(1, Math.ceil(total / size)) : 0;
-            console.log('--- _computeLastPage (', total, ', ', size, ') ---> ', newLastPage);
+            //console.log('--- _computeLastPage (', total, ', ', size, ') ---> ', newLastPage);
             return newLastPage;
         },
 

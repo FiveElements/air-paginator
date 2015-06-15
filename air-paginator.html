@@ -1,7 +1,10 @@
 <link rel="import" href="../polymer/polymer.html">
 
 <link rel="import" href="air-paginator-behaviour.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
 
+<link rel="import" href="../iron-icons/image-icons.html">
+<link rel="import" href="../iron-icons/av-icons.html">
 <!--
 
 The `air-cascade-validator` provides cascade validation for all nodes
@@ -24,14 +27,6 @@ The `air-cascade-validator` provides cascade validation for all nodes
             font-size: 18px;
             font-weight: bold;
             color: #424242;
-        }
-
-        .pagination .prev {
-            margin-right: 30px;
-        }
-
-        .pagination .next {
-            margin-left: 30px;
         }
 
         .pagination li {
@@ -58,6 +53,8 @@ The `air-cascade-validator` provides cascade validation for all nodes
             height: 38px;
             display: inline-block;
             padding-top: 5px;
+        @apply(- -shadow-transition);
+        @apply(- -shadow-elevation-6dp);
         }
 
         .pagination a {
@@ -140,30 +137,36 @@ The `air-cascade-validator` provides cascade validation for all nodes
         }
     </style>
     <template>
-        <h1>Paginator</h1>
-
-        <div>{{from}}</div>
-        <!--<template is="dom-if"  if="{{lastPage > 1}}">-->
-        <nav class="pagination">
-            <li on-tap="handleSelectPage">
-                <a class="prev items" pageid="first">&vartriangleleft;</a>
-            </li>
-            <li on-tap="handleSelectPage">
-                <a class="prev items" pageid="previous">&laquo;</a>
-            </li>
-            <template is="dom-repeat" items="[[currentRange]]" as="page">
-                <li on-tap="handleSelectPage" class$="[[_computeCurrentPageClass(page,currentPage)]]">
-                    <a class="items" pageid$="[[page[[">{{page}}</a>
+        <template is="dom-if" if="[[_isPaginator(lastPage)]]">
+            <nav class="pagination">
+                <li on-tap="handleSelectPage" pageid="first">
+                    <a class="first items">
+                        <iron-icon icon="av:skip-previous"></iron-icon>
+                    </a>
                 </li>
-            </template>
-            <li on-tap="handleSelectPage">
-                <a class="next items" pageid="next">&raquo;</a>
-            </li>
-            <li on-tap="handleSelectPage" pageid="last">
-                <a class="next items" pageid="last">&vartriangleright;</a>
-            </li>
-        </nav>
-        <!--</template>-->
+                <li on-tap="handleSelectPage" pageid="previous">
+                    <a class="previous items">
+                        <iron-icon icon="image:navigate-before"></iron-icon>
+                    </a>
+                </li>
+                <template is="dom-repeat" items="[[currentRange]]" as="page">
+                    <li on-tap="handleSelectPage" pageid$="[[page]]"
+                        class$="[[_computeCurrentPageClass(page,currentPage)]]">
+                        <a class="items">[[page]]</a>
+                    </li>
+                </template>
+                <li on-tap="handleSelectPage" pageid="next">
+                    <a class="next items">
+                        <iron-icon icon="image:navigate-next"></iron-icon>
+                    </a>
+                </li>
+                <li on-tap="handleSelectPage" pageid="last">
+                    <a class="last items">
+                        <iron-icon icon="av:skip-next"></iron-icon>
+                    </a>
+                </li>
+            </nav>
+        </template>
 
     </template>
 </dom-module>
@@ -178,12 +181,23 @@ The `air-cascade-validator` provides cascade validation for all nodes
             behaviors: [
                 Polymer.AirPaginatorBehavior
             ],
+            _isPaginator: function (lastPage) {
+                return lastPage > 1;
+            },
             _computeCurrentPageClass: function (page, currentPage) {
-                console.log('_computeCurrentPageClass ', currentPage, '=?=',page  );
                 return this.currentPage === page ? 'active' : '';
             },
-            _computeLastPageClass: function () {
-                return this.currentPage >= this.lastPage ? 'disabled' : '';
+            _computeFirstPageClass: function (currentPage) {
+                return this._computePreviousPageClass(currentPage);
+            },
+            _computePreviousPageClass: function (currentPage) {
+                return currentPage <= 1 ? 'disabled' : '';
+            },
+            _computeNextPageClass: function (currentPage, lastPage) {
+                return currentPage >= lastPage ? 'disabled' : '';
+            },
+            _computeLastPageClass: function (currentPage, lastPage) {
+                return this._computeNextPageClass(currentPage, lastPage);
             }
 
         });
