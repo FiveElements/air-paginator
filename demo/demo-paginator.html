@@ -50,6 +50,7 @@ The `user-validator` provides
         </div>
 
         <section class="vertical layout">
+            <div>from : <span>{{from}}</span></div>
             <div>currentpage : <span>{{currentPage}}</span></div>
             <div>lastpage : <span>{{lastPage}}</span></div>
         </section>
@@ -74,7 +75,7 @@ The `user-validator` provides
                 from: {
                     type: Number,
                     notify: true,
-                    value: 10
+                    value: 0
                 },
                 size: {
                     type: Number,
@@ -93,8 +94,7 @@ The `user-validator` provides
                 },
                 currentPage: {
                     type: Number,
-                    notify: true,
-                    value: 10
+                    notify: true
                 },
                 lastPage: {
                     type:Number,

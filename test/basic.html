@@ -26,7 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <test-fixture id="Basic">
     <template is="dom-template">
-        <air-paginator from="{{from}}" size="{{size}}" range="5"></air-paginator>
+        <air-paginator from="{{from}}" size="{{size}}" range="5" total="{{total}}"></air-paginator>
     </template>
 </test-fixture>
 
@@ -34,12 +34,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     suite('Initial State', function () {
         test('PageBound1', function () {
             f = fixture('Basic', {from: 0, size: 10, total: 105});
-            assert.equal(f.currentPage, 1);
+            // Test Value Injection
             assert.equal(f.from, 0);
             assert.equal(f.size, 10);
             assert.equal(f.total, 105);
-            alert(f);
+            // Test Computed Values
+            assert.equal(f.currentPage, 1);
             assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
         });
         test('PageBound1 Bad from +1', function () {
             f = fixture('Basic', {from: 1, size: 10, total: 105});
@@ -59,11 +61,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
         test('PageBound2', function () {
             f = fixture('Basic', {from: 10, size: 10, total: 105});
-            assert.equal(f.currentPage, 1);
+            assert.equal(f.currentPage, 2);
         });
         test('PageBound2 +1', function () {
             f = fixture('Basic', {from: 11, size: 10, total: 105});
             assert.equal(f.currentPage, 2);
+        });
+        test('PageBound2 +9', function () {
+            f = fixture('Basic', {from: 19, size: 10, total: 105});
+            assert.equal(f.currentPage, 2);
+        });
+        test('PageBound3 ', function () {
+            f = fixture('Basic', {from: 20, size: 10, total: 105});
+            assert.equal(f.currentPage, 3);
         });
     });
 

@@ -53,6 +53,7 @@
             currentPage: {
                 type: Number,
                 notify: true,
+                observer: '_currentPageChanged',
                 value: 1
             },
             currentRange: {
@@ -71,10 +72,12 @@
         // --- ---------------------
         handleSelectPage: function(event) {
             var evt = Polymer.dom(event);
-            // console.dir(event);
-            // console.dir(evt);
             var sender =  evt.rootTarget;
             var pageid = sender.getAttribute('pageid');
+//            console.log("Event : " , event);
+//            console.log("Event Normalize : ", evt);
+//            console.log("Sender : ", sender);
+//            console.log("Page Id : ", pageid);
             this.selectPage(pageid);
         },
 
@@ -118,10 +121,24 @@
             this.currentPage = nextCurrent;
         },
 
+        // --- Observer
+        // --- ---------------------
+        _currentPageChanged: function (newValue, oldValue) {
+            var newFromValue = Math.max(0, (newValue - 1) * this.size);
+            console.log('_currentPageChanged to ', newValue, ' ---- from ---->',  this.from ,  ' to ', newFromValue);
+            if (this.from !== newFromValue) {
+                this.from = newFromValue;
+                // Fire Event On page Change but not in the init time
+                if (oldValue !== undefined) {
+                    this._firePagingChangeEvent();
+                }
+            }
+
+        },
 
         // --- Event
         // --- ---------------------
-        firePagingChangeEvent: function () {
+        _firePagingChangeEvent: function () {
             this.fire('change', {
                 'from': this.from,
                 'size': this.size
@@ -137,10 +154,12 @@
             this.currentPage = nextCurrent;
         },
 
+
+
         // --- Computed Logic
         // --- ---------------------
         _computePageRange: function (range, firstpage, currentpage, lastpage) {
-            console.log('--- _computePageRange (', range, ', ', firstpage, ', ', currentpage, ', ', lastpage, ') ---> ');
+
 
             var paginations = [];
             // Check currentPage in range
@@ -167,6 +186,7 @@
             for (var i = rangeMin; i <= rangeMax; i++) {
                 paginations.push(i);
             }
+            console.log('--- _computePageRange (', range, ', ', firstpage, ', ', currentpage, ', ', lastpage, ') ---> ', paginations);
             return paginations;
         },
 
