@@ -138,29 +138,30 @@ The `air-cascade-validator` provides cascade validation for all nodes
     </style>
     <template>
         <template is="dom-if" if="[[_isPaginator(lastPage)]]">
-            <nav class="pagination">
-                <li on-tap="handleSelectPage" pageid="first">
+            <nav class="pagination" role="navigation">
+                <li on-tap="handleSelectPage" pageid="first" aria-label="First Page">
                     <a class="first items">
                         <iron-icon icon="av:skip-previous"></iron-icon>
                     </a>
                 </li>
-                <li on-tap="handleSelectPage" pageid="previous">
+                <li on-tap="handleSelectPage" pageid="previous" aria-label="Previous Page">
                     <a class="previous items">
                         <iron-icon icon="image:navigate-before"></iron-icon>
                     </a>
                 </li>
                 <template is="dom-repeat" items="[[currentRange]]" as="page">
                     <li on-tap="handleSelectPage" pageid$="[[page]]"
+                        aria-label$="[[_computePageAriaLabel(page,lastPage,currentPage)]]"
                         class$="[[_computeCurrentPageClass(page,currentPage)]]">
                         <a class="items">[[page]]</a>
                     </li>
                 </template>
-                <li on-tap="handleSelectPage" pageid="next">
+                <li on-tap="handleSelectPage" pageid="next" aria-label="Next Page">
                     <a class="next items">
                         <iron-icon icon="image:navigate-next"></iron-icon>
                     </a>
                 </li>
-                <li on-tap="handleSelectPage" pageid="last">
+                <li on-tap="handleSelectPage" pageid="last" aria-label="Last Page">
                     <a class="last items">
                         <iron-icon icon="av:skip-next"></iron-icon>
                     </a>
@@ -183,6 +184,13 @@ The `air-cascade-validator` provides cascade validation for all nodes
             ],
             _isPaginator: function (lastPage) {
                 return lastPage > 1;
+            },
+            _computePageAriaLabel: function (page, lastPage, currentPage) {
+                if (currentPage !== page) {
+                    return 'Page ' + page + '/' + lastPage;
+                } else {
+                    return 'Currently reading Page ' + page + '/' + lastPage;
+                }
             },
             _computeCurrentPageClass: function (page, currentPage) {
                 return this.currentPage === page ? 'active' : '';
