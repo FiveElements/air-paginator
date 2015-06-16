@@ -23,7 +23,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body>
 
 
-
 <test-fixture id="Basic">
     <template is="dom-template">
         <air-paginator from="{{from}}" size="{{size}}" range="5" total="{{total}}"></air-paginator>
@@ -76,7 +75,164 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             assert.equal(f.currentPage, 3);
         });
     });
-
+    suite('Navigate', function () {
+        test('Go to Page X', function () {
+            f = fixture('Basic', {from: 0, size: 10, total: 105});
+            // Test Value Injection
+            assert.equal(f.from, 0);
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
+            // Go to Page 2
+            f.selectPage(2);
+            assert.equal(f.currentPage, 2);
+            assert.equal(f.from, 10);
+            // Go to Page 11
+            f.selectPage(11);
+            assert.equal(f.currentPage, 11);
+            assert.equal(f.from, 100);
+            // Go to Page 3
+            f.selectPage(3);
+            assert.equal(f.currentPage, 3);
+            assert.equal(f.from, 20);
+        });
+        test('Go to Page X OutOfBound', function () {
+            f = fixture('Basic', {from: 0, size: 10, total: 105});
+            // Test Value Injection
+            assert.equal(f.from, 0);
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
+            // Go to Page 12
+            f.selectPage(12);
+            assert.equal(f.currentPage, 11);
+            assert.equal(f.from, 100);
+            // Go to Page 1
+            f.selectPage(0);
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.from, 0);
+            // Go to Page 1
+            f.selectPage(-5);
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.from, 0);
+        });
+        test('Go to Page +X', function () {
+            f = fixture('Basic', {from: 0, size: 10, total: 105});
+            // Test Value Injection
+            assert.equal(f.from, 0);
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
+            // Go to Page 2
+            f.selectPage('+1');
+            assert.equal(f.currentPage, 2);
+            assert.equal(f.from, 10);
+            // Go to Page 4
+            f.selectPage('+2');
+            assert.equal(f.currentPage, 4);
+            assert.equal(f.from, 30);
+            // Go to Page 9
+            f.selectPage('+5');
+            assert.equal(f.currentPage, 9);
+            assert.equal(f.from, 80);
+            // Go to Page 10
+            f.selectPage('+1');
+            assert.equal(f.currentPage, 10);
+            assert.equal(f.from, 90);
+            // Go to Page 11
+            f.selectPage('+1');
+            assert.equal(f.currentPage, 11);
+            assert.equal(f.from, 100);
+        });
+        test('Go to Page +X OutOfBound', function () {
+            f = fixture('Basic', {from: 0, size: 10, total: 105});
+            // Test Value Injection
+            assert.equal(f.from, 0);
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
+            // Go to Page 2
+            f.selectPage('+12');
+            assert.equal(f.currentPage, 11);
+            assert.equal(f.from, 100);
+        });
+        test('Go to Page Next', function () {
+            f = fixture('Basic', {from: 0, size: 10, total: 105});
+            // Test Value Injection
+            assert.equal(f.from, 0);
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
+            // Go to Page 2
+            f.selectPage('next');
+            assert.equal(f.currentPage, 2);
+            assert.equal(f.from, 10);
+            // Go to Page 3
+            f.selectPage('next');
+            assert.equal(f.currentPage, 3);
+            assert.equal(f.from, 20);
+            // Go to Page 4 --> 11
+            for (var pge = 4; pge <= 11; pge++) {
+                f.selectPage('next');
+                assert.equal(f.currentPage, pge);
+                assert.equal(f.from, (pge - 1) * 10);
+            }
+        });
+        test('Go to Page Next OutOfBound', function () {
+            f = fixture('Basic', {from: 100, size: 10, total: 105});
+            // Test Value Injection
+            assert.equal(f.from, 100);
+            assert.equal(f.currentPage, 11);
+            assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
+            // Go to Page 12
+            f.selectPage('next');
+            assert.equal(f.currentPage, 11);
+            assert.equal(f.from, 100);
+            // Go to Page 13
+            f.selectPage('next');
+            assert.equal(f.currentPage, 11);
+            assert.equal(f.from, 100);
+        });
+        test('Go to Page Previous', function () {
+            f = fixture('Basic', {from: 100, size: 10, total: 105});
+            // Test Value Injection
+            assert.equal(f.from, 100);
+            assert.equal(f.currentPage, 11);
+            assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
+            // Go to Page 10
+            f.selectPage('previous');
+            assert.equal(f.currentPage, 10);
+            assert.equal(f.from, 90);
+            // Go to Page 9
+            f.selectPage('previous');
+            assert.equal(f.currentPage, 9);
+            assert.equal(f.from, 80);
+            // Go to Page 8 --> 1
+            for (var pge = 8; pge >= 1; pge--) {
+                f.selectPage('previous');
+                assert.equal(f.currentPage, pge);
+                assert.equal(f.from, (pge - 1) * 10);
+            }
+        });
+        test('Go to Page Previous OutOfBound', function () {
+            f = fixture('Basic', {from: 0, size: 10, total: 105});
+            // Test Value Injection
+            assert.equal(f.from, 0);
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
+            // Go to Page 0
+            f.selectPage('previous');
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.from, 0);
+            // Go to Page -1
+            f.selectPage('previous');
+            assert.equal(f.currentPage, 1);
+            assert.equal(f.from, 0);
+        });
+    });
 </script>
 
 </body>
