@@ -353,6 +353,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             assert.equal(f.currentPage, 1);
             assert.equal(f.from, 0);
         });
+        test('Go to Page nawak', function () {
+            f = fixture('Basic', {from: 0, size: 10, total: 105});
+            // Test Value Injection
+            assert.equal(f.from, 0);
+            assert.equal(f.currentPage,1);
+            assert.equal(f.lastPage, 11);
+            assert.equal(f.firstPage, 1);
+            // Go to Page nextRange
+            f.selectPage('nawak');
+        });
     });
 
     suite('Navigate Event', function () {
