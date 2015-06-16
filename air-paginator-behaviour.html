@@ -70,9 +70,9 @@
 
         // --- Apis
         // --- ---------------------
-        handleSelectPage: function(event) {
+        handleSelectPage: function (event) {
             var evt = Polymer.dom(event);
-            var sender =  evt.rootTarget;
+            var sender = evt.rootTarget;
             var pageid = this._findParentNodeAttrValue('pageid', sender);
 //            console.log("Event : " , event);
 //            console.log("Event Normalize : ", evt);
@@ -83,16 +83,16 @@
                 this.selectPage(pageid);
             }
         },
-        _findParentNodeAttrValue:function(attrName, node) {
+        _findParentNodeAttrValue: function (attrName, node) {
             var nodePageId = this._findParentNodeWithAttr(attrName, node);
             if (nodePageId) {
                 return nodePageId.getAttribute(attrName);
             }
         },
-        _findParentNodeWithAttr:function(attrName, node) {
+        _findParentNodeWithAttr: function (attrName, node) {
             if (!node) {
                 return undefined;
-            } else  if (node.getAttribute(attrName)) {
+            } else if (node.getAttribute(attrName)) {
                 return node;
             } else {
                 return this._findParentNodeWithAttr(attrName, node.parentNode);
@@ -100,7 +100,7 @@
         },
 
         selectPage: function (pageid) {
-             console.log("select Page : ", pageid);
+            console.log("select Page : ", pageid);
             // verb control
             switch (pageid) {
                 case 'next' :
@@ -136,10 +136,10 @@
                 nextCurrent = Math.min(Math.max(parseInt(pageid, 10), this.firstPage), this.lastPage);
             }
             //console.log("select Page : ", pageid, ' ---- > currentPage = ', nextCurrent);
-            if (Number.isInteger(nextCurrent) ) {
+            if (Number.isInteger(nextCurrent)) {
                 this.currentPage = nextCurrent;
             } else {
-                console.log('Ignore change to pageid : ', pageid, ' -- evaluated at ', nextCurrent);
+                console.warn('Ignore change to pageid : ', pageid, ' -- evaluated at ', nextCurrent);
             }
         },
 
@@ -173,14 +173,13 @@
             var nextCurrent = size > 0 ? Math.max(1, Math.floor(from / size) + 1) : 0;
             //  console.log('compute current page :', nextCurrent);
             //console.log('--- _computeCurrentPage (', from, ', ', size, ') ---> ', nextCurrent);
-            if (Number.isInteger(nextCurrent) ) {
+            if (Number.isInteger(nextCurrent)) {
                 this.currentPage = nextCurrent;
             } else {
-                console.log('Ignore compute range with from:', from,  ', size: ', size, ' == computed at ==> ', nextCurrent);
-                this.currentPage =1;
+                console.warn('Ignore compute range with from:', from, ', size: ', size, ' == computed at ==> ', nextCurrent);
+                this.currentPage = 1;
             }
         },
-
 
 
         // --- Computed Logic
