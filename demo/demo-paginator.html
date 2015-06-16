@@ -56,9 +56,9 @@ The `user-validator` provides
         </section>
 
 
-        <air-paginator range="{{range}}"  last-page="{{lastPage}}" current-page="{{currentPage}}"
+        <air-paginator range="{{range}}" last-page="{{lastPage}}" current-page="{{currentPage}}"
                        from="{{from}}" size="{{size}}"
-                       total="{{total}}">
+                       total="{{total}}" on-change="_onChangePaging">
 
         </air-paginator>
     </template>
@@ -97,9 +97,13 @@ The `user-validator` provides
                     notify: true
                 },
                 lastPage: {
-                    type:Number,
+                    type: Number,
                     notify: true
                 }
+            },
+            _onChangePaging: function (event) {
+                var detail = event.detail;
+                console.log('-- onchange event ', detail);
             }
 
 
