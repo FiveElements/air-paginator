@@ -61,6 +61,15 @@ The `user-validator` provides
                        total="{{total}}" on-change="_onChangePaging">
 
         </air-paginator>
+        <section>
+            <h1>Paginator Events</h1>
+
+            <div> 
+                <template is="dom-repeat" items="[[paginatorEvents]]" as="event">
+                    <div>Event Change From:<span>{{event.from}}</span> Size:<span>{{event.size}}</span></div>
+                </template>
+            </div>
+        </section>
     </template>
 </dom-module>
 
@@ -99,10 +108,18 @@ The `user-validator` provides
                 lastPage: {
                     type: Number,
                     notify: true
+                },
+                paginatorEvents: {
+                    type: Array,
+                    notify: true,
+                    value: function () {
+                        return [];
+                    }
                 }
             },
             _onChangePaging: function (event) {
                 var detail = event.detail;
+                this.push('paginatorEvents', detail);
                 console.log('-- onchange event ', detail);
             }
 
