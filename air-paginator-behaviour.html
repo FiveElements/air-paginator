@@ -56,7 +56,7 @@
             maxPage: {
                 type: Number,
                 notify: true,
-                computed: '_computeLastPage(total, size)'
+                computed: '_computeMaxPage(total, size)'
             },
             /**
              * The current page view by the user.
@@ -64,7 +64,7 @@
             page: {
                 type: Number,
                 notify: true,
-                observer: '_currentPageChanged',
+                observer: '_pageChanged',
                 value: 1
             },
             /**
@@ -168,13 +168,13 @@
 
         // --- Observer
         // --- ---------------------
-        _currentPageChanged: function (newValue, oldValue) {
+        _pageChanged: function (newValue, oldValue) {
             // Keep history
             this._lastPage = oldValue;
-            console.log('page change ', oldValue, ' ----> ', newValue, ' ==  this._lastPage : ',  this._lastPage);
+            //console.log('page change ', oldValue, ' ----> ', newValue, ' ==  this._lastPage : ',  this._lastPage);
             // From Computed
             var newFromValue = Math.max(0, (newValue - 1) * this.size);
-            //console.log('_currentPageChanged to ', newValue, ' ---- from ---->',  this.from ,  ' to ', newFromValue);
+            //console.log('_pageChanged to ', newValue, ' ---- from ---->',  this.from ,  ' to ', newFromValue);
             if (this.from !== newFromValue) {
                 this.from = newFromValue;
                 // Fire Event On page Change but not in the init time
@@ -202,6 +202,7 @@
             //  console.log('compute current page :', nextCurrent);
             //console.log('--- _computeCurrentPage (', from, ', ', size, ') ---> ', nextCurrent);
             if (Number.isInteger(nextCurrent)) {
+                this._lastPage = this.page;
                 this.page = nextCurrent;
             } else {
                 console.warn('Ignore compute range with from:', from, ', size: ', size, ' == computed at ==> ', nextCurrent);
@@ -257,10 +258,10 @@
             return paginations;
         },
 
-        _computeLastPage: function (total, size) {
+        _computeMaxPage: function (total, size) {
             // return Math.ceil(this.total / this.size);
             var newLastPage = size > 0 ? Math.max(1, Math.ceil(total / size)) : 0;
-            //console.log('--- _computeLastPage (', total, ', ', size, ') ---> ', newLastPage);
+            //console.log('--- _computeMaxPage (', total, ', ', size, ') ---> ', newLastPage);
             return newLastPage;
         },
 

@@ -29,19 +29,23 @@ The `air-cascade-validator` provides cascade validation for all nodes
             font-size: 18px;
             font-weight: bold;
             color: #424242;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .pagination li {
-            display: inline;
+            display: inline-block;
         }
 
         .pagination .active .items, .pagination .active .items:hover {
             z-index: 2;
             background-color: #ff4081;
-            cursor: default;
         }
 
         .pagination .items {
+            cursor: pointer;
             position: relative;
             font-size: 14px;
             text-decoration: none;
@@ -52,8 +56,8 @@ The `air-cascade-validator` provides cascade validation for all nodes
             height: 38px;
             line-height: 38px;
             display: inline-block;
-            @apply(--shadow-transition);
-            @apply(--shadow-elevation-6dp);
+        @apply(- -shadow-transition);
+        @apply(- -shadow-elevation-6dp);
         }
 
         .pagination a {
@@ -137,13 +141,15 @@ The `air-cascade-validator` provides cascade validation for all nodes
     </style>
     <template>
         <template is="dom-if" if="[[_isPaginator(maxPage)]]">
-            <nav class="pagination" role="navigation">
-                <li on-tap="handleSelectPage" pageid="first" aria-label="First Page">
+            <ul class="pagination" role="navigation">
+                <li on-tap="handleSelectPage" pageid="first" aria-label="First Page"
+                    class$="[[_computeMinPageClass(page, minPage)]]">
                     <a class="first items">
                         <iron-icon icon="av:skip-previous"></iron-icon>
                     </a>
                 </li>
-                <li on-tap="handleSelectPage" pageid="previous" aria-label="Previous Page">
+                <li on-tap="handleSelectPage" pageid="previous" aria-label="Previous Page"
+                    class$="[[_computePreviousPageClass(page, minPage)]]">
                     <a class="previous items">
                         <iron-icon icon="image:navigate-before"></iron-icon>
                     </a>
@@ -155,17 +161,19 @@ The `air-cascade-validator` provides cascade validation for all nodes
                         <a class="items">[[indexPage]]</a>
                     </li>
                 </template>
-                <li on-tap="handleSelectPage" pageid="next" aria-label="Next Page">
+                <li on-tap="handleSelectPage" pageid="next" aria-label="Next Page"
+                    class$="[[_computeNextPageClass(page, maxPage)]]">
                     <a class="next items">
                         <iron-icon icon="image:navigate-next"></iron-icon>
                     </a>
                 </li>
-                <li on-tap="handleSelectPage" pageid="last" aria-label="Last Page">
+                <li on-tap="handleSelectPage" pageid="last" aria-label="Last Page"
+                    class$="[[_computeMaxPageClass(page, maxPage)]]">
                     <a class="last items">
                         <iron-icon icon="av:skip-next"></iron-icon>
                     </a>
                 </li>
-            </nav>
+            </ul>
         </template>
 
     </template>
@@ -192,18 +200,24 @@ The `air-cascade-validator` provides cascade validation for all nodes
                 }
             },
             _computeCurrentPageClass: function (indexPage, page) {
-                return  page === indexPage ? 'active' : '';
+                return page === indexPage ? 'active' : '';
             },
-            _computeFirstPageClass: function (page) {
-                return this._computePreviousPageClass(currentPage);
+            _computeMinPageClass: function (page, minPage) {
+                return this._computePreviousPageClass(page, minPage);
             },
-            _computePreviousPageClass: function (page) {
-                return currentPage <= 1 ? 'disabled' : '';
+            _isPreviousPage: function (page, minPage) {
+                return page <= minPage;
+            },
+            _computePreviousPageClass: function (page, minPage) {
+                return this._isPreviousPage(page, minPage) ? 'disabled' : '';
+            },
+            _isNextPage: function (page, maxPage) {
+                return page >= maxPage;
             },
             _computeNextPageClass: function (page, maxPage) {
-                return page >= maxPage ? 'disabled' : '';
+                return this._isNextPage(page, maxPage) ? 'disabled' : '';
             },
-            _computeLastPageClass: function (page, maxPage) {
+            _computeMaxPageClass: function (page, maxPage) {
                 return this._computeNextPageClass(page, maxPage);
             }
 
