@@ -51,12 +51,12 @@ The `user-validator` provides
 
         <section class="vertical layout">
             <div>from : <span>{{from}}</span></div>
-            <div>currentpage : <span>{{currentPage}}</span></div>
-            <div>lastpage : <span>{{lastPage}}</span></div>
+            <div>current page : <span>{{page}}</span></div>
+            <div>maxPage : <span>{{maxPage}}</span></div>
         </section>
 
 
-        <air-paginator range="{{range}}" last-page="{{lastPage}}" current-page="{{currentPage}}"
+        <air-paginator range="{{range}}" max-page="{{maxPage}}" page="{{page}}"
                        from="{{from}}" size="{{size}}"
                        total="{{total}}" on-change="_onChangePaging">
 
@@ -101,11 +101,11 @@ The `user-validator` provides
                     notify: true,
                     value: 10
                 },
-                currentPage: {
+                page: {
                     type: Number,
                     notify: true
                 },
-                lastPage: {
+                maxPage: {
                     type: Number,
                     notify: true
                 },

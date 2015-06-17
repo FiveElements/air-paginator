@@ -136,7 +136,7 @@ The `air-cascade-validator` provides cascade validation for all nodes
         }
     </style>
     <template>
-        <template is="dom-if" if="[[_isPaginator(lastPage)]]">
+        <template is="dom-if" if="[[_isPaginator(maxPage)]]">
             <nav class="pagination" role="navigation">
                 <li on-tap="handleSelectPage" pageid="first" aria-label="First Page">
                     <a class="first items">
@@ -148,11 +148,11 @@ The `air-cascade-validator` provides cascade validation for all nodes
                         <iron-icon icon="image:navigate-before"></iron-icon>
                     </a>
                 </li>
-                <template is="dom-repeat" items="[[currentRange]]" as="page">
-                    <li on-tap="handleSelectPage" pageid$="[[page]]"
-                        aria-label$="[[_computePageAriaLabel(page,lastPage,currentPage)]]"
-                        class$="[[_computeCurrentPageClass(page,currentPage)]]">
-                        <a class="items">[[page]]</a>
+                <template is="dom-repeat" items="[[currentRange]]" as="indexPage">
+                    <li on-tap="handleSelectPage" pageid$="[[indexPage]]"
+                        aria-label$="[[_computePageAriaLabel(indexPage,maxPage,page)]]"
+                        class$="[[_computeCurrentPageClass(indexPage,page)]]">
+                        <a class="items">[[indexPage]]</a>
                     </li>
                 </template>
                 <li on-tap="handleSelectPage" pageid="next" aria-label="Next Page">
@@ -181,30 +181,30 @@ The `air-cascade-validator` provides cascade validation for all nodes
             behaviors: [
                 Polymer.AirPaginatorBehavior
             ],
-            _isPaginator: function (lastPage) {
-                return lastPage > 1;
+            _isPaginator: function (maxPage) {
+                return maxPage > 1;
             },
-            _computePageAriaLabel: function (page, lastPage, currentPage) {
-                if (currentPage !== page) {
-                    return 'Page ' + page + '/' + lastPage;
+            _computePageAriaLabel: function (indexPage, maxPage, page) {
+                if (page !== indexPage) {
+                    return 'Page ' + indexPage + '/' + maxPage;
                 } else {
-                    return 'Currently reading Page ' + page + '/' + lastPage;
+                    return 'Currently reading Page ' + indexPage + '/' + maxPage;
                 }
             },
-            _computeCurrentPageClass: function (page, currentPage) {
-                return this.currentPage === page ? 'active' : '';
+            _computeCurrentPageClass: function (indexPage, page) {
+                return  page === indexPage ? 'active' : '';
             },
-            _computeFirstPageClass: function (currentPage) {
+            _computeFirstPageClass: function (page) {
                 return this._computePreviousPageClass(currentPage);
             },
-            _computePreviousPageClass: function (currentPage) {
+            _computePreviousPageClass: function (page) {
                 return currentPage <= 1 ? 'disabled' : '';
             },
-            _computeNextPageClass: function (currentPage, lastPage) {
-                return currentPage >= lastPage ? 'disabled' : '';
+            _computeNextPageClass: function (page, maxPage) {
+                return page >= maxPage ? 'disabled' : '';
             },
-            _computeLastPageClass: function (currentPage, lastPage) {
-                return this._computeNextPageClass(currentPage, lastPage);
+            _computeLastPageClass: function (page, maxPage) {
+                return this._computeNextPageClass(page, maxPage);
             }
 
         });

@@ -17,7 +17,7 @@
                 value: 0
             },
             /**
-             * The Number of the Items to display In the List
+             * The Number of the Items to display In the List.
              */
             size: {
                 type: Number,
@@ -25,7 +25,8 @@
                 value: 10
             },
             /**
-             * The range of Page to display In the Paginator
+             * The number ofPage s'range to display.
+             * A range= -1 mean that you want to display all the available pages.
              */
             range: {
                 type: Number,
@@ -33,33 +34,54 @@
                 value: 10
             },
             /**
-             * Number of Items In the List
+             * Number of All Items In the result Set.
+             * It is used to computed the number of pages.
              */
             total: {
                 type: Number,
                 notify: true
             },
-            // Status Value
-            firstPage: {
+            /**
+             * The first page is always to be one.
+             * Except if you want that to use an index instead of the natural page number.
+             */
+            minPage: {
                 type: Number,
                 readonly: true,
                 value: 1
             },
-            lastPage: {
+            /**
+             * The Max pages computed with the total.
+             */
+            maxPage: {
                 type: Number,
                 notify: true,
                 computed: '_computeLastPage(total, size)'
             },
-            currentPage: {
+            /**
+             * The current page view by the user.
+             */
+            page: {
                 type: Number,
                 notify: true,
                 observer: '_currentPageChanged',
                 value: 1
             },
+            /**
+             * The last page view by the user.
+             * It is used internaly to have smart range placement.
+             */
+            _lastPage: {
+                type: Number,
+                notify: true
+            },
+            /**
+             * The Array of all the page to display.
+             */
             currentRange: {
                 type: Array,
                 notify: true,
-                computed: '_computePageRange(range, firstPage, currentPage, lastPage)'
+                computed: '_computePageRange(range, minPage, page, maxPage)'
             }
         },
 
@@ -116,28 +138,29 @@
                     pageid = '-' + this.range;
                     break;
                 case 'first' :
-                    pageid = this.firstPage;
+                    pageid = this.minPage;
                     break;
                 case 'last' :
-                    pageid = this.lastPage;
+                    pageid = this.maxPage;
                     break;
             }
-            var nextCurrent = this.currentPage;
+            var nextCurrent = this.page;
             // Do operation
             if ((typeof pageid === 'string') && (pageid.indexOf('+') === 0)) {
                 var inc1 = parseInt(pageid.slice(1), 10);
-                //console.log('Select  page + ', inc, ' current ', this.currentPage, ' /this.lastPage , ', this.lastPage);
-                nextCurrent = Math.min(this.lastPage, this.currentPage + inc1);
-                //console.log('Select  page + ', inc, ' current ', this.currentPage);
+                //console.log('Select  page + ', inc, ' current ', this.page, ' /this.maxPage , ', this.maxPage);
+                nextCurrent = Math.min(this.maxPage, this.page + inc1);
+                //console.log('Select  page + ', inc, ' current ', this.page);
             } else if ((typeof pageid === 'string') && (pageid.indexOf('-') === 0)) {
                 var inc2 = parseInt(pageid.slice(1), 10);
-                nextCurrent = Math.max(this.firstPage, this.currentPage - inc2);
+                nextCurrent = Math.max(this.minPage, this.page - inc2);
             } else {
-                nextCurrent = Math.min(Math.max(parseInt(pageid, 10), this.firstPage), this.lastPage);
+                nextCurrent = Math.min(Math.max(parseInt(pageid, 10), this.minPage), this.maxPage);
             }
-            //console.log("select Page : ", pageid, ' ---- > currentPage = ', nextCurrent);
+            //console.log("select Page : ", pageid, ' ---- > page = ', nextCurrent);
             if (Number.isInteger(nextCurrent)) {
-                this.currentPage = nextCurrent;
+                this._lastPage = this.page;
+                this.page = nextCurrent;
             } else {
                 console.warn('Ignore change to pageid : ', pageid, ' -- evaluated at ', nextCurrent);
             }
@@ -146,6 +169,10 @@
         // --- Observer
         // --- ---------------------
         _currentPageChanged: function (newValue, oldValue) {
+            // Keep history
+            this._lastPage = oldValue;
+            console.log('page change ', oldValue, ' ----> ', newValue, ' ==  this._lastPage : ',  this._lastPage);
+            // From Computed
             var newFromValue = Math.max(0, (newValue - 1) * this.size);
             //console.log('_currentPageChanged to ', newValue, ' ---- from ---->',  this.from ,  ' to ', newFromValue);
             if (this.from !== newFromValue) {
@@ -163,7 +190,8 @@
         _firePagingChangeEvent: function () {
             this.fire('change', {
                 'from': this.from,
-                'size': this.size
+                'size': this.size,
+                'page': this.page
             });
         },
 
@@ -174,10 +202,10 @@
             //  console.log('compute current page :', nextCurrent);
             //console.log('--- _computeCurrentPage (', from, ', ', size, ') ---> ', nextCurrent);
             if (Number.isInteger(nextCurrent)) {
-                this.currentPage = nextCurrent;
+                this.page = nextCurrent;
             } else {
                 console.warn('Ignore compute range with from:', from, ', size: ', size, ' == computed at ==> ', nextCurrent);
-                this.currentPage = 1;
+                this.page = 1;
             }
         },
 
@@ -185,7 +213,7 @@
         // --- Computed Logic
         // --- ---------------------
         _computePageRange: function (range, firstpage, currentpage, lastpage) {
-            if (this.currentRange) {
+            if (this.currentRange && this.range>=3) {
                 var indexInRange = this.currentRange.indexOf(currentpage);
                 if (indexInRange > 0 && indexInRange < this.currentRange.length - 1) {
                     // Don't recompute the range is not needed
@@ -194,14 +222,14 @@
             }
 
             var paginations = [];
-            // Check currentPage in range
-//            if (currentPage > lastPage) {
-//                this.currentPage = Math.max(firstPage, lastPage);
+            // Check page in range
+//            if (page > maxPage) {
+//                this.page = Math.max(minPage, maxPage);
 //                return paginations;
 //            }
             // Rangeoo
             var rangeMin, rangeMax;
-            if (this.range === -1) {
+            if (this.range <= -1) {
                 // Display all pages
                 rangeMin = firstpage;
                 rangeMax = lastpage;
@@ -209,13 +237,12 @@
                 // Display a range of pages
                 // TODO Compute the center o the range in function of the Navigation Direction
                 var rangeMiddle = Math.ceil(range / 2) - 1;
-                console.log()
-                if (this.currentPage && currentpage > this.currentPage) {
+                if (this._lastPage && currentpage > this._lastPage) {
                     rangeMiddle = 1;
-                } else if (this.currentPage && currentpage< this.currentPage) {
-                    rangeMiddle = 2;
+                } else if (this._lastPage && currentpage< this._lastPage) {
+                    rangeMiddle = range-2;
                 }
-                console.log('_computePageRange ---> currentpage:',currentpage, ' //  this.currentPage:',  this.currentPage);
+                console.log('_computePageRange ---> currentpage:',currentpage, ' //  this._lastPage:',  this._lastPage);
                 rangeMin = Math.max(1, currentpage - rangeMiddle);
                 rangeMax = Math.min(lastpage, rangeMin + range - 1);
             }
