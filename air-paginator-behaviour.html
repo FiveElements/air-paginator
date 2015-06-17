@@ -243,7 +243,7 @@
                 } else if (this._lastPage && currentpage< this._lastPage) {
                     rangeMiddle = range-2;
                 }
-                console.log('_computePageRange ---> currentpage:',currentpage, ' //  this._lastPage:',  this._lastPage);
+                //console.log('_computePageRange ---> currentpage:',currentpage, ' //  this._lastPage:',  this._lastPage);
                 rangeMin = Math.max(1, currentpage - rangeMiddle);
                 rangeMax = Math.min(lastpage, rangeMin + range - 1);
             }

@@ -119,7 +119,7 @@ The `user-validator` provides
             },
             _onChangePaging: function (event) {
                 var detail = event.detail;
-                this.push('paginatorEvents', detail);
+                this.unshift('paginatorEvents', detail);
                 console.log('-- onchange event ', detail);
             }
 
