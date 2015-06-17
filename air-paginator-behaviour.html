@@ -186,7 +186,11 @@
         // --- ---------------------
         _computePageRange: function (range, firstpage, currentpage, lastpage) {
             if (this.currentRange) {
-
+                var indexInRange = this.currentRange.indexOf(currentpage);
+                if (indexInRange>0 && indexInRange<this.currentRange.length-1) {
+                    // Don't recompute the range is not needed
+                    return this.currentRange;
+                }
             }
 
             var paginations = [];
@@ -203,6 +207,7 @@
                 rangeMax = lastpage;
             } else {
                 // Display a range of pages
+                // TODO Compute the center o the range in function of the Navigation Direction
                 var rangeMiddle = Math.ceil(range / 2) - 1;
                 rangeMin = Math.max(1, currentpage - rangeMiddle);
                 rangeMax = Math.min(lastpage, rangeMin + range - 1);
