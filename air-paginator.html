@@ -13,10 +13,21 @@ The `air-paginator` provides a server pagination
 
 If you want to implement your own pagination, you could just import the logic with using `Polymer.AirPaginatorBehavior`.
 
+### Styling
+
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--paper-checkbox-unchecked-color` | Checkbox color when the input is not checked | `--primary-text-color`
+
+
 @group air-elements
 @element air-paginator
 @demo demo/index.html
 -->
+
+
 
 <dom-module id="air-paginator">
 
@@ -58,13 +69,8 @@ If you want to implement your own pagination, you could just import the logic wi
             height: 38px;
             line-height: 38px;
             display: inline-block;
-        @apply(--shadow-transition);
-        @apply(--shadow-elevation-6dp);
-        }
-
-        .pagination a {
-            text-decoration: none;
-            color: #424242;
+        @apply(- -shadow-transition);
+        @apply(- -shadow-elevation-6dp);
         }
 
         /* BOOTSTRAP */
@@ -150,12 +156,24 @@ If you want to implement your own pagination, you could just import the logic wi
                         <iron-icon icon="av:skip-previous"></iron-icon>
                     </a>
                 </li>
+
+                <template is="dom-if" is="[[navRange]]">
+                    <li on-tap="handleSelectPage" pageid="previousRange" aria-label="Previous range of Pages"
+                        class$="[[_computePreviousPageClass(page, minPage)]]">
+                        <a class="previous items">
+                            <iron-icon icon="av:fast-rewind"></iron-icon>
+                        </a>
+                    </li>
+                </template>
+
                 <li on-tap="handleSelectPage" pageid="previous" aria-label="Previous Page"
                     class$="[[_computePreviousPageClass(page, minPage)]]">
                     <a class="previous items">
                         <iron-icon icon="image:navigate-before"></iron-icon>
                     </a>
                 </li>
+
+
                 <template is="dom-repeat" items="[[displayRange]]" as="indexPage">
                     <li on-tap="handleSelectPage" pageid$="[[indexPage]]"
                         aria-label$="[[_computePageAriaLabel(indexPage,maxPage,page)]]"
@@ -163,12 +181,22 @@ If you want to implement your own pagination, you could just import the logic wi
                         <a class="items">[[indexPage]]</a>
                     </li>
                 </template>
+
                 <li on-tap="handleSelectPage" pageid="next" aria-label="Next Page"
                     class$="[[_computeNextPageClass(page, maxPage)]]">
                     <a class="next items">
                         <iron-icon icon="image:navigate-next"></iron-icon>
                     </a>
                 </li>
+
+                <template is="dom-if" is="[[navRange]]">
+                    <li on-tap="handleSelectPage" pageid="nextRange" aria-label="Next Range of Pages"
+                        class$="[[_computePreviousPageClass(page, minPage)]]">
+                        <a class="previous items">
+                            <iron-icon icon="av:fast-forward"></iron-icon>
+                        </a>
+                    </li>
+                </template>
                 <li on-tap="handleSelectPage" pageid="last" aria-label="Last Page"
                     class$="[[_computeMaxPageClass(page, maxPage)]]">
                     <a class="last items">
@@ -187,6 +215,19 @@ If you want to implement your own pagination, you could just import the logic wi
 
         Polymer({
             is: 'air-paginator',
+
+            properties: {
+                navRange: {
+                    type: Boolean,
+                    notify: true,
+                    value: false
+                },
+                navNext: {
+                    type: Boolean,
+                    notify: true,
+                    value: false
+                }
+            },
 
             behaviors: [
                 Polymer.AirPaginatorBehavior

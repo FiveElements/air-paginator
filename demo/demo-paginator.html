@@ -6,6 +6,7 @@
 <link rel="import" href="../../paper-input/paper-input.html">
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../paper-slider/paper-slider.html">
+<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
 
 <link rel="import" href="../air-paginator.html">
 
@@ -17,6 +18,17 @@ The `user-validator` provides
 @element demo-validator
 @demo demo/index.html
 -->
+
+<style is="custom-style">
+    .line {
+        margin-bottom: 40px;
+    }
+
+    .line span {
+        margin-left: 24px;
+    }
+
+</style>
 
 <dom-module id="demo-paginator">
 
@@ -31,11 +43,21 @@ The `user-validator` provides
     </style>
     <template>
 
+        <div class="horizontal layout">
+            <div class="line">
+                <paper-toggle-button toggles="{{navRange}}"></paper-toggle-button><span>navRange</span>
+            </div>
+            <div class="line">
+                <paper-toggle-button toggles="{{navNext}}"></paper-toggle-button><span>navNext</span>
+            </div>
+        </div>
 
         <div class="horizontal layout">
             <div>Range</div>
             <paper-slider value="{{range}}" min="-1" max="50" editable></paper-slider>
         </div>
+
+
         <div class="horizontal layout">
             <div>Size</div>
             <paper-slider value="{{size}}" max="100" editable></paper-slider>
@@ -50,7 +72,6 @@ The `user-validator` provides
         </div>
 
 
-
         <section class="vertical layout">
             <div>from : <span>{{from}}</span></div>
             <div>maxPage : <span>{{maxPage}}</span></div>
@@ -59,7 +80,9 @@ The `user-validator` provides
 
         <air-paginator range="{{range}}" max-page="{{maxPage}}" page="{{page}}"
                        from="{{from}}" size="{{size}}"
-                       total="{{total}}" on-change="_onChangePaging">
+                       total="{{total}}"
+                       nav-range="{{navRange}}" nav-next="{{navNext}}"
+                       on-change="_onChangePaging">
 
         </air-paginator>
         <section>
@@ -67,7 +90,9 @@ The `user-validator` provides
 
             <ul>
                 <template is="dom-repeat" items="[[paginatorEvents]]" as="event">
-                    <li><b><span>[[event.eventCount]]</span>.</b> Event Paginator Change : Page=<span>{{event.page}}</span>, From=<span>{{event.from}}</span>, Size=<span>{{event.size}}</span></li>
+                    <li><b><span>[[event.eventCount]]</span>.</b> Event Paginator Change :
+                        Page=<span>{{event.page}}</span>, From=<span>{{event.from}}</span>,
+                        Size=<span>{{event.size}}</span></li>
                 </template>
             </ul>
         </section>
@@ -82,6 +107,7 @@ The `user-validator` provides
             is: 'demo-paginator',
 
             properties: {
+
                 from: {
                     type: Number,
                     notify: true,
@@ -101,6 +127,16 @@ The `user-validator` provides
                     type: Number,
                     notify: true,
                     value: 10
+                },
+                navRange: {
+                    type: Boolean,
+                    notify: true,
+                    value: false
+                },
+                navNext: {
+                    type: Boolean,
+                    notify: true,
+                    value: true
                 },
                 page: {
                     type: Number,
