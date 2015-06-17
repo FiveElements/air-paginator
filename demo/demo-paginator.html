@@ -49,9 +49,10 @@ The `user-validator` provides
             <paper-input label="from" value="{{from}}" type="number"></paper-input>
         </div>
 
+
+
         <section class="vertical layout">
             <div>from : <span>{{from}}</span></div>
-            <div>current page : <span>{{page}}</span></div>
             <div>maxPage : <span>{{maxPage}}</span></div>
         </section>
 
@@ -64,11 +65,11 @@ The `user-validator` provides
         <section>
             <h1>Paginator Events</h1>
 
-            <div>
+            <ul>
                 <template is="dom-repeat" items="[[paginatorEvents]]" as="event">
-                    <div>Event Change From:<span>{{event.from}}</span> Size:<span>{{event.size}}</span></div>
+                    <li><b><span>[[event.eventCount]]</span>.</b> Event Paginator Change : Page=<span>{{event.page}}</span>, From=<span>{{event.from}}</span>, Size=<span>{{event.size}}</span></li>
                 </template>
-            </div>
+            </ul>
         </section>
     </template>
 </dom-module>
@@ -115,10 +116,16 @@ The `user-validator` provides
                     value: function () {
                         return [];
                     }
+                },
+                paginatorEventCount: {
+                    type: Number,
+                    notify: true,
+                    value: 1
                 }
             },
             _onChangePaging: function (event) {
                 var detail = event.detail;
+                detail.eventCount = this.paginatorEventCount++;
                 this.unshift('paginatorEvents', detail);
                 console.log('-- onchange event ', detail);
             }

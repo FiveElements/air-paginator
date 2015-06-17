@@ -154,7 +154,7 @@ The `air-cascade-validator` provides cascade validation for all nodes
                         <iron-icon icon="image:navigate-before"></iron-icon>
                     </a>
                 </li>
-                <template is="dom-repeat" items="[[currentRange]]" as="indexPage">
+                <template is="dom-repeat" items="[[displayRange]]" as="indexPage">
                     <li on-tap="handleSelectPage" pageid$="[[indexPage]]"
                         aria-label$="[[_computePageAriaLabel(indexPage,maxPage,page)]]"
                         class$="[[_computeCurrentPageClass(indexPage,page)]]">
@@ -189,9 +189,21 @@ The `air-cascade-validator` provides cascade validation for all nodes
             behaviors: [
                 Polymer.AirPaginatorBehavior
             ],
+
+            // --- Display Logic
+            // --- ---------------------
             _isPaginator: function (maxPage) {
                 return maxPage > 1;
             },
+            _isNextPage: function (page, maxPage) {
+                return page >= maxPage;
+            },
+            _isPreviousPage: function (page, minPage) {
+                return page <= minPage;
+            },
+
+            // --- Aria Labels
+            // --- ---------------------
             _computePageAriaLabel: function (indexPage, maxPage, page) {
                 if (page !== indexPage) {
                     return 'Page ' + indexPage + '/' + maxPage;
@@ -199,21 +211,20 @@ The `air-cascade-validator` provides cascade validation for all nodes
                     return 'Currently reading Page ' + indexPage + '/' + maxPage;
                 }
             },
+
+            // --- Compute Class
+            // --- ---------------------
             _computeCurrentPageClass: function (indexPage, page) {
                 return page === indexPage ? 'active' : '';
             },
             _computeMinPageClass: function (page, minPage) {
                 return this._computePreviousPageClass(page, minPage);
             },
-            _isPreviousPage: function (page, minPage) {
-                return page <= minPage;
-            },
+
             _computePreviousPageClass: function (page, minPage) {
                 return this._isPreviousPage(page, minPage) ? 'disabled' : '';
             },
-            _isNextPage: function (page, maxPage) {
-                return page >= maxPage;
-            },
+
             _computeNextPageClass: function (page, maxPage) {
                 return this._isNextPage(page, maxPage) ? 'disabled' : '';
             },
@@ -221,6 +232,8 @@ The `air-cascade-validator` provides cascade validation for all nodes
                 return this._computeNextPageClass(page, maxPage);
             }
 
+            // --- End
+            // --- ---------------------
         });
     })();
 </script>

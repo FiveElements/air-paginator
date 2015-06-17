@@ -78,7 +78,7 @@
             /**
              * The Array of all the page to display.
              */
-            currentRange: {
+            displayRange: {
                 type: Array,
                 notify: true,
                 computed: '_computePageRange(range, minPage, page, maxPage)'
@@ -214,11 +214,11 @@
         // --- Computed Logic
         // --- ---------------------
         _computePageRange: function (range, firstpage, currentpage, lastpage) {
-            if (this.currentRange && this.range>=3) {
-                var indexInRange = this.currentRange.indexOf(currentpage);
-                if (indexInRange > 0 && indexInRange < this.currentRange.length - 1) {
+            if (this.displayRange && this.range>=3) {
+                var indexInRange = this.displayRange.indexOf(currentpage);
+                if (indexInRange > 0 && indexInRange < this.displayRange.length - 1) {
                     // Don't recompute the range is not needed
-                    return this.currentRange;
+                    return this.displayRange;
                 }
             }
 
