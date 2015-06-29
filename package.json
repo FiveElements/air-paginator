@@ -27,10 +27,10 @@
   },
   "homepage": "https://github.com/FiveElements/air-paginator#readme",
   "devDependencies": {
-    "browser-sync": "^2.7.7",
+    "browser-sync": "^2.7.13",
     "gulp": "^3.9.0",
-    "gulp-jshint": "^1.11.0",
-    "jshint-stylish": "^2.0.0",
-    "web-component-tester": "^3.1.7"
+    "gulp-jshint": "^1.11.1",
+    "jshint-stylish": "^2.0.1",
+    "web-component-tester": "^3.2.0"
   }
 }
