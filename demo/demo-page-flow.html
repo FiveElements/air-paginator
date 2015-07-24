@@ -8,14 +8,14 @@
 <link rel="import" href="../../paper-slider/paper-slider.html">
 <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
 
-<link rel="import" href="../air-paginator.html">
+<link rel="import" href="../water-page-flow.html">
 
 <!--
 
-The `demo-paginator` provides a demonstration of using the Web-component `air-paginator`
+The `demo-page-flow` provides a demonstration of using the Web-component `water-page-flow`
 
-@group demo-paginator Elements
-@element demo-paginator
+@group demo-water-elements
+@element demo-page-flow
 @demo demo/index.html
 -->
 
@@ -30,7 +30,7 @@ The `demo-paginator` provides a demonstration of using the Web-component `air-pa
 
 </style>
 
-<dom-module id="demo-paginator">
+<dom-module id="demo-page-flow">
 
     <style>
         :host {
@@ -78,13 +78,13 @@ The `demo-paginator` provides a demonstration of using the Web-component `air-pa
         </section>
 
 
-        <air-paginator range="{{range}}" max-page="{{maxPage}}" page="{{page}}"
+        <water-page-flow range="{{range}}" max-page="{{maxPage}}" page="{{page}}"
                        from="{{from}}" size="{{size}}"
                        total="{{total}}"
                        nav-range="{{navRange}}" nav-next="{{navNext}}"
                        on-change="_onChangePaging">
 
-        </air-paginator>
+        </water-page-flow>
         <section>
             <h1>Paginator Events</h1>
 
@@ -104,7 +104,7 @@ The `demo-paginator` provides a demonstration of using the Web-component `air-pa
         'use strict';
 
         Polymer({
-            is: 'demo-paginator',
+            is: 'demo-page-flow',
 
             properties: {
 

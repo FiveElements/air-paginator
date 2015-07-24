@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 
-<link rel="import" href="air-paginator-behaviour.html">
+<link rel="import" href="water-page-flow-behaviour.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 
 <link rel="import" href="../iron-icons/image-icons.html">
@@ -9,9 +9,9 @@
 <link rel="import" href="../paper-styles/shadow.html">
 <!--
 
-The `air-paginator` provides a server pagination
+The `water-page-flow` provides a server pagination
 
-If you want to implement your own pagination, you could just import the logic with using `Polymer.AirPaginatorBehavior`.
+If you want to implement your own pagination, you could just import the logic with using `FiveElements.WaterPageFlowBehavior`.
 
 ### Styling
 
@@ -22,13 +22,13 @@ Custom property | Description | Default
 `--paper-checkbox-unchecked-color` | Checkbox color when the input is not checked | `--primary-text-color`
 
 
-@group air-elements
-@element air-paginator
+@group water-elements
+@element water-page-flow
 @demo demo/index.html
 -->
 
 
-<dom-module id="air-paginator">
+<dom-module id="water-page-flow">
 
     <style>
         :host {
@@ -74,19 +74,19 @@ Custom property | Description | Default
 
         /* BOOTSTRAP */
 
-        .air-pagination {
+        .water-page-flow {
             display: inline-block;
             padding-left: 0;
             margin: 20px 0;
             border-radius: 4px;
         }
 
-        .air-pagination > li {
+        .water-page-flow > li {
             display: inline;
         }
 
-        .air-pagination > li > a,
-        .air-pagination > li > span {
+        .water-page-flow > li > a,
+        .water-page-flow > li > span {
             position: relative;
             float: left;
             margin-left: -1px;
@@ -99,34 +99,34 @@ Custom property | Description | Default
             font-size: 18px;
         }
 
-        .air-pagination > li:first-child > a,
-        .air-pagination > li:first-child > span {
+        .water-page-flow > li:first-child > a,
+        .water-page-flow > li:first-child > span {
             margin-left: 0;
             border-top-left-radius: 6px;
             border-bottom-left-radius: 6px;
         }
 
-        .air-pagination > li:last-child > a,
-        .air-pagination > li:last-child > span {
+        .water-page-flow > li:last-child > a,
+        .water-page-flow > li:last-child > span {
             border-top-right-radius: 6px;
             border-bottom-right-radius: 6px;
         }
 
-        .air-pagination > li > a:hover,
-        .air-pagination > li > span:hover,
-        .air-pagination > li > a:focus,
-        .air-pagination > li > span:focus {
+        .water-page-flow > li > a:hover,
+        .water-page-flow > li > span:hover,
+        .water-page-flow > li > a:focus,
+        .water-page-flow > li > span:focus {
             color: #23527c;
             background-color: #eee;
             border-color: #ddd;
         }
 
-        .air-pagination > .active > a,
-        .air-pagination > .active > span,
-        .air-pagination > .active > a:hover,
-        .air-pagination > .active > span:hover,
-        .air-pagination > .active > a:focus,
-        .air-pagination > .active > span:focus {
+        .water-page-flow > .active > a,
+        .water-page-flow > .active > span,
+        .water-page-flow > .active > a:hover,
+        .water-page-flow > .active > span:hover,
+        .water-page-flow > .active > a:focus,
+        .water-page-flow > .active > span:focus {
             z-index: 2;
             color: #fff;
             cursor: default;
@@ -134,12 +134,12 @@ Custom property | Description | Default
             border-color: #337ab7;
         }
 
-        .air-pagination > .disabled > span,
-        .air-pagination > .disabled > span:hover,
-        .air-pagination > .disabled > span:focus,
-        .air-pagination > .disabled > a,
-        .air-pagination > .disabled > a:hover,
-        .air-pagination > .disabled > a:focus {
+        .water-page-flow > .disabled > span,
+        .water-page-flow > .disabled > span:hover,
+        .water-page-flow > .disabled > span:focus,
+        .water-page-flow > .disabled > a,
+        .water-page-flow > .disabled > a:hover,
+        .water-page-flow > .disabled > a:focus {
             color: #777;
             cursor: not-allowed;
             background-color: #fff;
@@ -213,7 +213,7 @@ Custom property | Description | Default
         'use strict';
 
         Polymer({
-            is: 'air-paginator',
+            is: 'water-page-flow',
 
             properties: {
                 navRange: {
@@ -229,7 +229,7 @@ Custom property | Description | Default
             },
 
             behaviors: [
-                Polymer.AirPaginatorBehavior
+                FiveElements.WaterPageFlowBehavior
             ],
 
             // --- Display Logic

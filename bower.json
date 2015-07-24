@@ -1,9 +1,9 @@
 {
-  "name": "air-paginator",
+  "name": "water-page-flow",
   "private": true,
   "version": "0.0.1",
   "description": "A Polymer element that manage Pagination",
-  "main": "air-paginator.html",
+  "main": "water-page-flow.html",
   "author": [
     "The Five Elements Authors"
   ],
@@ -11,7 +11,9 @@
     "web-components",
     "polymer",
     "paginator",
-    "air-elements"
+    "page",
+    "paging",
+    "water-elements"
   ],
   "ignore": [
     "/.*",

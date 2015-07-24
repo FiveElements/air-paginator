@@ -1,7 +1,7 @@
 {
-  "name": "air-paginator",
+  "name": "water-page-flow",
   "version": "0.0.1",
-  "description": "Air paginator",
+  "description": "Water page flow",
   "main": "gulpfile.js",
   "directories": {
     "test": "test"
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FiveElements/air-paginator.git"
+    "url": "git+https://github.com/FiveElements/water-page-flow.git"
   },
   "keywords": [
     "web-components",
@@ -23,9 +23,9 @@
   "author": "Five Elements Author",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/FiveElements/air-paginator/issues"
+    "url": "https://github.com/FiveElements/water-page-flow/issues"
   },
-  "homepage": "https://github.com/FiveElements/air-paginator#readme",
+  "homepage": "https://github.com/FiveElements/water-page-flow#readme",
   "devDependencies": {
     "browser-sync": "^2.7.13",
     "gulp": "^3.9.0",

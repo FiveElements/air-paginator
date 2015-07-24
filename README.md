@@ -1,7 +1,7 @@
-# air-paginator
-The Air Paginator manager the pagination of server result Set.
+# water-page-flow
+The Water Page flow manager the pagination of server result Set.
 
-# Polymer.AirPaginatorBehavior 
+# Polymer.WaterPageFlowBehavior 
 The pagination business logic usable to implements your own pagination Web-component.
 
 
